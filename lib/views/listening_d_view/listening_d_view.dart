@@ -64,6 +64,12 @@ class _ListeningDViewState extends State<ListeningDView> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _playAudio(_questions[_currentQuestionIndex].audioPath); // Pehle question ka audio auto play
+  }
+
+  @override
   void dispose() {
     _audioPlayer.stop();
     _audioPlayer.dispose();
@@ -88,6 +94,7 @@ class _ListeningDViewState extends State<ListeningDView> {
     if (_currentQuestionIndex < _questions.length - 1) {
       setState(() {
         _currentQuestionIndex++;
+        _playAudio(_questions[_currentQuestionIndex].audioPath); // Naya audio play karo
       });
     } else {
       _finishQuiz();
@@ -98,6 +105,7 @@ class _ListeningDViewState extends State<ListeningDView> {
     if (_currentQuestionIndex > 0) {
       setState(() {
         _currentQuestionIndex--;
+        _playAudio(_questions[_currentQuestionIndex].audioPath); // Naya audio play karo
       });
     }
   }
