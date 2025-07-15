@@ -164,13 +164,13 @@ final List<FillBlankQuestion> listeningDQuestions = [
     beforeBlank: "Tom's Talking About His Recent Visit To A ",
     afterBlank: " With His Classmates.",
     correctAnswer: "Museum",
-    audioPath: "audio/listening1Audio1.mp3",
+    audioPath: "audio/listeningDAudio1.mp3",
   ),
   FillBlankQuestion(
     beforeBlank: "The Development Of Technology Have Certainmmnly ",
     afterBlank: " How Families",
     correctAnswer: "Changed",
-    audioPath: "audio/listening1Audio2.mp3",
+    audioPath: "audio/listeningDAudio2.mp3",
   ),
   FillBlankQuestion(
     beforeBlank: "The Development Of Technology Have Certainmmnly ",
