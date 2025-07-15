@@ -1,259 +1,215 @@
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:get/get.dart';
 import 'package:studypool/common_widget/text_widget.dart';
 import 'package:studypool/views/detail_view/detail_view.dart';
+import 'listening_d_controller.dart';
 import 'package:studypool/models/quiz_model.dart';
-import 'package:studypool/models/data.dart';
 
-class ListeningDView extends StatefulWidget {
-  const ListeningDView({super.key});
-
-  @override
-  State<ListeningDView> createState() => _ListeningDViewState();
-}
-
-class _ListeningDViewState extends State<ListeningDView> {
-  final AudioPlayer _audioPlayer = AudioPlayer();
-  final List<TextEditingController> _controllers = List.generate(5, (_) => TextEditingController());
-  final List<Map<String, String>> _userAnswers = List.generate(5, (_) => {'userAnswer': '', 'correctAnswer': ''});
-  int _currentQuestionIndex = 0;
-
-  final List<FillBlankQuestion> _questions = listeningDQuestions;
-
-  @override
-  void initState() {
-    super.initState();
-    _playAudio(_questions[_currentQuestionIndex].audioPath); // Pehle question ka audio auto play
-  }
-
-  @override
-  void dispose() {
-    _audioPlayer.stop();
-    _audioPlayer.dispose();
-    for (final c in _controllers) {
-      c.dispose();
-    }
-    super.dispose();
-  }
-
-  void _playAudio(String audioPath) async {
-    try {
-      await _audioPlayer.stop();
-      await _audioPlayer.play(AssetSource(audioPath));
-    } catch (e) {}
-  }
-
-  void _nextQuestion() {
-    _userAnswers[_currentQuestionIndex] = {
-      'userAnswer': _controllers[_currentQuestionIndex].text.trim(),
-      'correctAnswer': _questions[_currentQuestionIndex].correctAnswer,
-    };
-    if (_currentQuestionIndex < _questions.length - 1) {
-      setState(() {
-        _currentQuestionIndex++;
-        _playAudio(_questions[_currentQuestionIndex].audioPath); // Naya audio play karo
-      });
-    } else {
-      _finishQuiz();
-    }
-  }
-
-  void _previousQuestion() {
-    if (_currentQuestionIndex > 0) {
-      setState(() {
-        _currentQuestionIndex--;
-        _playAudio(_questions[_currentQuestionIndex].audioPath); // Naya audio play karo
-      });
-    }
-  }
-
-  void _finishQuiz() {
-    _audioPlayer.stop();
-    _userAnswers[_currentQuestionIndex] = {
-      'userAnswer': _controllers[_currentQuestionIndex].text.trim(),
-      'correctAnswer': _questions[_currentQuestionIndex].correctAnswer,
-    };
-    // Add isCorrect key for case-insensitive checking
-    final List<Map<String, String>> checkedAnswers = [];
-    for (int i = 0; i < _userAnswers.length; i++) {
-      final user = _userAnswers[i]['userAnswer'] ?? '';
-      final correct = _userAnswers[i]['correctAnswer'] ?? '';
-      final isCorrect = user.toLowerCase().trim() == correct.toLowerCase().trim();
-      checkedAnswers.add({
-        'userAnswer': user,
-        'correctAnswer': correct,
-        'isCorrect': isCorrect.toString(),
-      });
-    }
-    final List<Question> detailQuestions = _questions.map((q) => Question(
-      questionText: q.beforeBlank + '_____' + q.afterBlank,
-      options: [],
-      optionImages: [],
-      correctAnswer: q.correctAnswer,
-      audioPath: q.audioPath,
-    )).toList();
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => DetailView(
-          userAnswers: checkedAnswers,
-          questions: detailQuestions,
-        ),
-      ),
-    );
-  }
-
-  bool get _isCurrentFilled => _controllers[_currentQuestionIndex].text.trim().isNotEmpty;
+class ListeningDView extends StatelessWidget {
+  ListeningDView({super.key});
+  final ListeningDController controller = Get.put(ListeningDController());
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.sizeOf(context).width;
     final screenHeight = MediaQuery.sizeOf(context).height;
-    final q = _questions[_currentQuestionIndex];
-    final isLast = _currentQuestionIndex == _questions.length - 1;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+    return WillPopScope(
+      onWillPop: () async {
+        controller.audioPlayer.stop();
+        return true;
+      },
+      child: Scaffold(
         backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-        title: const GreenText(
-          text: "Listening D",
-          fontWeight: FontWeight.w700,
-          fontSize: 20,
-        ),
-      ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFFF1F8E9), Color(0xFFE0F7FA)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              controller.audioPlayer.stop();
+              Get.back();
+            },
+          ),
+          backgroundColor: Colors.white,
+          elevation: 0,
+          centerTitle: true,
+          title: const GreenText(
+            text: "Listening D",
+            fontWeight: FontWeight.w700,
+            fontSize: 20,
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // Progress Dots
-            Padding(
-              padding: EdgeInsets.only(bottom: screenHeight * 0.02),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(_questions.length, (index) {
-                  return Container(
-                    margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.011),
-                    width: screenWidth * 0.037,
-                    height: screenWidth * 0.037,
-                    decoration: BoxDecoration(
-                      color: index == _currentQuestionIndex
-                          ? Colors.green
-                          : Colors.green.withOpacity(0.2),
-                      shape: BoxShape.circle,
-                    ),
-                  );
-                }),
+        body: Obx(() {
+          final q = controller.questions[controller.currentQuestionIndex.value];
+          final isLast = controller.currentQuestionIndex.value == controller.questions.length - 1;
+          return Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFFF1F8E9), Color(0xFFE0F7FA)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
             ),
-            Card(
-              elevation: 5,
-              margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(screenWidth * 0.04),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.04,
-                  vertical: screenHeight * 0.04,
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: GreenText(
-                        text: "${_currentQuestionIndex + 16}. ${q.beforeBlank}",
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                      ),
-                    ),
-                    SizedBox(width: screenWidth * 0.01),
-                    Container(
-                      width: screenWidth * 0.22,
-                      child: TextField(
-                        controller: _controllers[_currentQuestionIndex],
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(bottom: screenHeight * 0.02),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(controller.questions.length, (index) {
+                      return Container(
+                        margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.011),
+                        width: screenWidth * 0.037,
+                        height: screenWidth * 0.037,
+                        decoration: BoxDecoration(
+                          color: index == controller.currentQuestionIndex.value
+                              ? Colors.green
+                              : Colors.green.withOpacity(0.2),
+                          shape: BoxShape.circle,
                         ),
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(vertical: screenHeight * 0.012),
-                          filled: true,
-                          fillColor: Colors.white,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(screenWidth * 0.03),
-                            borderSide: BorderSide(color: Colors.green.shade200, width: 2),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(screenWidth * 0.03),
-                            borderSide: BorderSide(color: Colors.green, width: 2.5),
-                          ),
-                        ),
-                        onTap: () => _playAudio(q.audioPath),
-                        onChanged: (val) => setState(() {}),
-                      ),
-                    ),
-                    SizedBox(width: screenWidth * 0.01),
-                    Expanded(
-                      child: GreenText(
-                        text: q.afterBlank,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: screenHeight * 0.06),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.08),
-              child: SizedBox(
-                width: double.infinity,
-                height: screenHeight * 0.07,
-                child: ElevatedButton(
-                  onPressed: _isCurrentFilled ? _nextQuestion : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _isCurrentFilled ? Colors.green : Colors.grey,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(screenWidth * 0.08),
-                    ),
-                    elevation: 6,
-                  ),
-                  child: GreenText(
-                    text: isLast ? "Finish" : "Next",
-                    textColor: Colors.white,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18,
+                      );
+                    }),
                   ),
                 ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: screenHeight * 0.01),
-              child: IconButton(
-                onPressed: _currentQuestionIndex > 0 ? _previousQuestion : null,
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  color: _currentQuestionIndex > 0 ? Colors.green : Colors.grey,
+                Card(
+                  elevation: 5,
+                  margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(screenWidth * 0.04),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.04,
+                      vertical: screenHeight * 0.04,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: GreenText(
+                            text: "${controller.currentQuestionIndex.value + 16}. ${q.beforeBlank}",
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                          ),
+                        ),
+                        SizedBox(width: screenWidth * 0.01),
+                        Container(
+                          width: screenWidth * 0.22,
+                          child: TextField(
+                            controller: controller.controllers[controller.currentQuestionIndex.value],
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(vertical: screenHeight * 0.012),
+                              filled: true,
+                              fillColor: Colors.white,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(screenWidth * 0.03),
+                                borderSide: BorderSide(color: Colors.green.shade200, width: 2),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(screenWidth * 0.03),
+                                borderSide: BorderSide(color: Colors.green, width: 2.5),
+                              ),
+                            ),
+                            onTap: () => controller.playAudio(q.audioPath),
+                            onChanged: (val) => controller.textFieldValue.value = val,
+                          ),
+                        ),
+                        SizedBox(width: screenWidth * 0.01),
+                        Expanded(
+                          child: GreenText(
+                            text: q.afterBlank,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                iconSize: screenWidth * 0.07,
-              ),
+                SizedBox(height: screenHeight * 0.06),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.08),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: screenHeight * 0.07,
+                    child: ElevatedButton(
+                      onPressed: controller.textFieldValue.value.trim().isNotEmpty
+                          ? () {
+                              if (isLast) {
+                                // Last answer ko bhi update karo
+                                controller.userAnswers[controller.currentQuestionIndex.value] = {
+                                  'userAnswer': controller.controllers[controller.currentQuestionIndex.value].text.trim(),
+                                  'correctAnswer': controller.questions[controller.currentQuestionIndex.value].correctAnswer,
+                                };
+                                controller.audioPlayer.stop();
+                                // Prepare answers for DetailView
+                                final List<Map<String, String>> checkedAnswers = [];
+                                for (int i = 0; i < controller.userAnswers.length; i++) {
+                                  final user = controller.userAnswers[i]['userAnswer'] ?? '';
+                                  final correct = controller.userAnswers[i]['correctAnswer'] ?? '';
+                                  final isCorrect = user.toLowerCase().trim() == correct.toLowerCase().trim();
+                                  checkedAnswers.add({
+                                    'userAnswer': user,
+                                    'correctAnswer': correct,
+                                    'isCorrect': isCorrect.toString(),
+                                  });
+                                }
+                                final List<Question> detailQuestions = controller.questions.map((q) => Question(
+                                  questionText: q.beforeBlank + '_____' + q.afterBlank,
+                                  options: [],
+                                  optionImages: [],
+                                  correctAnswer: q.correctAnswer,
+                                  audioPath: q.audioPath,
+                                )).toList();
+                                Get.to(() => DetailView(
+                                      userAnswers: checkedAnswers,
+                                      questions: detailQuestions,
+                                    ));
+                              } else {
+                                controller.nextQuestion();
+                                // Update textFieldValue for next question
+                                controller.textFieldValue.value = controller.controllers[controller.currentQuestionIndex.value].text;
+                              }
+                            }
+                          : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: controller.controllers[controller.currentQuestionIndex.value].text.trim().isNotEmpty ? Colors.green : Colors.grey,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(screenWidth * 0.08),
+                        ),
+                        elevation: 6,
+                      ),
+                      child: GreenText(
+                        text: isLast ? "Finish" : "Next",
+                        textColor: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: screenHeight * 0.01),
+                  child: IconButton(
+                    onPressed: controller.currentQuestionIndex.value > 0 ? () => controller.previousQuestion() : null,
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: controller.currentQuestionIndex.value > 0 ? Colors.green : Colors.grey,
+                    ),
+                    iconSize: screenWidth * 0.07,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        }),
       ),
     );
   }

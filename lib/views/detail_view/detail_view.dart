@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:studypool/common_widget/text_widget.dart';
 import 'package:studypool/models/quiz_model.dart';
 import 'package:studypool/views/home_view/home_view.dart';
+import 'package:get/get.dart';
 
 
 class DetailView extends StatelessWidget {
@@ -117,7 +118,10 @@ class DetailView extends StatelessWidget {
               SizedBox(height: screenHeight * 0.03),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomeView()));
+                  // Sab controllers delete karo taki state reset ho jaye
+                  Get.deleteAll(force: true);
+                  // HomeView pe wapas jao (phir user fresh exam start kare)
+                  Get.offAll(() => HomeView());
                 },
                 child: GreenText(
                   text: "Restart Exam",

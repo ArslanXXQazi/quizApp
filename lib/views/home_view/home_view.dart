@@ -6,6 +6,11 @@ import 'package:studypool/views/listening_a_view/listening_a_view.dart';
 import 'package:studypool/views/listening_b_view/listening_b_view.dart';
 import 'package:studypool/views/listening_c_view/listening_c_view.dart';
 import 'package:studypool/views/listening_d_view/listening_d_view.dart';
+import 'package:get/get.dart';
+import 'package:studypool/views/listening_a_view/listening_a_controller.dart';
+import 'package:studypool/views/listening_b_view/listening_b_controller.dart';
+import 'package:studypool/views/listening_c_view/listening_c_controller.dart';
+import 'package:studypool/views/listening_d_view/listening_d_controller.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -28,7 +33,8 @@ class _HomeViewState extends State<HomeView> {
             Row(children: [
               Expanded(
                 child: ListeningContainer(
-                    onTap: (){
+                    onTap: () {
+                      Get.delete<ListeningAController>();
                       Navigator.push(context, CupertinoPageRoute(builder: (context)=>ListeningAView()));
                     },
                     text: "Listening A",
@@ -38,7 +44,8 @@ class _HomeViewState extends State<HomeView> {
               SizedBox(width: screenWidth*.03),
               Expanded(
                 child: ListeningContainer(
-                    onTap: (){
+                    onTap: () {
+                      Get.delete<ListeningBController>();
                       Navigator.push(context, CupertinoPageRoute(builder: (context)=>ListeningBView()));
                     },
                     text: "Listening B",
@@ -50,9 +57,9 @@ class _HomeViewState extends State<HomeView> {
             Row(children: [
               Expanded(
                 child: ListeningContainer(
-                    onTap: (){
+                    onTap: () {
+                      Get.delete<ListeningCController>();
                       Navigator.push(context, CupertinoPageRoute(builder: (context)=>ListeningCView()));
-
                     },
                     text: "Listening C",
                     color: Colors.orange
@@ -61,7 +68,8 @@ class _HomeViewState extends State<HomeView> {
               SizedBox(width: screenWidth*.03),
               Expanded(
                 child: ListeningContainer(
-                    onTap: (){
+                    onTap: () {
+                      Get.delete<ListeningDController>();
                       Navigator.push(context, CupertinoPageRoute(builder: (context)=>ListeningDView()));
                     },
                     text: "Listening D",
