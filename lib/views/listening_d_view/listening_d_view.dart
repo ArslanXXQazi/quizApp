@@ -117,7 +117,6 @@ class ListeningDView extends StatelessWidget {
                                 borderSide: BorderSide(color: Colors.green, width: 2.5),
                               ),
                             ),
-                            onTap: () => controller.playAudio(q.audioPath),
                             onChanged: (val) => controller.textFieldValue.value = val,
                           ),
                         ),
