@@ -134,12 +134,12 @@ final List<TrueFalseQuestion> listeningCQuestions = [
   TrueFalseQuestion(
     questionText: "Rebecca's Family Farmed The Land To Provide Food For Their Animals.",
     correctAnswer: true,
-    audioPath: "audio/listening1Audio1.mp3",
+    audioPath: "audio/listeningCAudio1.mp3",
   ),
   TrueFalseQuestion(
     questionText: "Rebecca's Teacher Thought That It Hardly Rained Because Of Climate Change.",
     correctAnswer: false,
-    audioPath: "audio/listening1Audio2.mp3",
+    audioPath: "audio/listeningCAudio2.mp3",
   ),
   TrueFalseQuestion(
     questionText: "Rebecca's Family Farmed The Land To Provide Food For Their Animals.",
