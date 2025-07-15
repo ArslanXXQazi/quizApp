@@ -2,18 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:studypool/common_widget/text_widget.dart';
 import 'package:studypool/views/detail_view/detail_view.dart';
-import 'package:studypool/views/listening_a_view/listening_a_view.dart'; // Import Question model
-
-class TrueFalseQuestion {
-  final String questionText;
-  final bool correctAnswer;
-  final String audioPath;
-  TrueFalseQuestion({
-    required this.questionText,
-    required this.correctAnswer,
-    required this.audioPath,
-  });
-}
+import 'package:studypool/models/quiz_model.dart';
+import 'package:studypool/models/data.dart';
 
 class ListeningCView extends StatefulWidget {
   const ListeningCView({super.key});
@@ -29,33 +19,7 @@ class _ListeningCViewState extends State<ListeningCView>
   bool? _selectedAnswer;
   final List<Map<String, String>> _userAnswers = [];
 
-  final List<TrueFalseQuestion> _questions = [
-    TrueFalseQuestion(
-      questionText: "Rebecca's Family Farmed The Land To Provide Food For Their Animals.",
-      correctAnswer: true,
-      audioPath: "audio/listening1Audio1.mp3",
-    ),
-    TrueFalseQuestion(
-      questionText: "Rebecca's Teacher Thought That It Hardly Rained Because Of Climate Change.",
-      correctAnswer: false,
-      audioPath: "audio/listening1Audio2.mp3",
-    ),
-    TrueFalseQuestion(
-      questionText: "Rebecca's Family Farmed The Land To Provide Food For Their Animals.",
-      correctAnswer: false,
-      audioPath: "audio/listening1Audio3.mp3",
-    ),
-    TrueFalseQuestion(
-      questionText: "Rebecca's Family Farmed The Land To Provide Food For Their Animals.",
-      correctAnswer: true,
-      audioPath: "audio/listening1Audio4.mp3",
-    ),
-    TrueFalseQuestion(
-      questionText: "Rebecca's Teacher Thought That It Hardly Rained Because Of Climate Change.",
-      correctAnswer: true,
-      audioPath: "audio/listening1Audio5.mp3",
-    ),
-  ];
+  final List<TrueFalseQuestion> _questions = listeningCQuestions;
 
   @override
   void initState() {

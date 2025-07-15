@@ -3,23 +3,25 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:studypool/common_widget/text_widget.dart';
 import 'package:studypool/images/app_images.dart';
 import 'package:studypool/views/detail_view/detail_view.dart';
+import 'package:studypool/models/quiz_model.dart';
+import 'package:studypool/models/data.dart';
 
 // Question model to hold question data
-class Question {
-  final String questionText;
-  final List<String> options;
-  final List<String> optionImages;
-  final String correctAnswer;
-  final String audioPath;
+// class Question {
+//   final String questionText;
+//   final List<String> options;
+//   final List<String> optionImages;
+//   final String correctAnswer;
+//   final String audioPath;
 
-  Question({
-    required this.questionText,
-    required this.options,
-    required this.optionImages,
-    required this.correctAnswer,
-    required this.audioPath,
-  });
-}
+//   Question({
+//     required this.questionText,
+//     required this.options,
+//     required this.optionImages,
+//     required this.correctAnswer,
+//     required this.audioPath,
+//   });
+// }
 
 class ListeningAView extends StatefulWidget {
   const ListeningAView({super.key});
@@ -35,68 +37,7 @@ class _ListeningAViewState extends State<ListeningAView> {
   final List<Map<String, String>> _userAnswers = []; // To store user answers
 
   // List of questions
-  final List<Question> _questions = [
-    Question(
-      questionText: "Which animal lives in the ocean?",
-      options: ["A) Giraffe", "B) Dolphin", "C) Lion", "D) Elephant"],
-      optionImages: [
-        AppImages.Giraffe,
-        AppImages.dolphin,
-        AppImages.lion,
-        AppImages.elephant,
-      ],
-      correctAnswer: "B) Dolphin",
-      audioPath: "audio/listening1Audio1.mp3",
-    ),
-    Question(
-      questionText: "Which animal is known for its spots and speed?",
-      options: ["A) Cheetah", "B) Rhino", "C) Zebra", "D) Gorilla"],
-      optionImages: [
-        AppImages.Giraffe,
-        AppImages.Giraffe,
-        AppImages.Giraffe,
-        AppImages.Giraffe,
-      ],
-      correctAnswer: "A) Cheetah",
-      audioPath: "audio/listening1Audio2.mp3",
-    ),
-    Question(
-      questionText: "Which animal has a long trunk?",
-      options: ["A) Tiger", "B) Snake", "C) Elephant", "D) Crocodile"],
-      optionImages: [
-        AppImages.Giraffe,
-        AppImages.Giraffe,
-        AppImages.Giraffe,
-        AppImages.Giraffe,
-      ],
-      correctAnswer: "C) Elephant",
-      audioPath: "audio/listening1Audio3.mp3",
-    ),
-    Question(
-      questionText: "Which animal is known for its colorful feathers?",
-      options: ["A) Lion", "B) Wolf", "C) Bear", "D) Parrot"],
-      optionImages: [
-        AppImages.Giraffe,
-        AppImages.Giraffe,
-        AppImages.Giraffe,
-        AppImages.Giraffe,
-      ],
-      correctAnswer: "D) Parrot",
-      audioPath: "audio/listening1Audio4.mp3",
-    ),
-    Question(
-      questionText: "Which animal lives in a hive and makes honey?",
-      options: ["A) Spider", "B) Butterfly", "C) Ant", "D) Bee"],
-      optionImages: [
-        AppImages.Giraffe,
-        AppImages.Giraffe,
-        AppImages.Giraffe,
-        AppImages.Giraffe,
-      ],
-      correctAnswer: "D) Bee",
-      audioPath: "audio/listening1Audio5.mp3",
-    ),
-  ];
+  final List<Question> _questions = listeningAQuestions;
 
   @override
   void initState() {

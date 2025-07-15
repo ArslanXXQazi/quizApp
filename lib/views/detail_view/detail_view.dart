@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:studypool/common_widget/text_widget.dart';
+import 'package:studypool/models/quiz_model.dart';
 import 'package:studypool/views/home_view/home_view.dart';
-import 'package:studypool/views/listening_a_view/listening_a_view.dart';
+
 
 class DetailView extends StatelessWidget {
   final List<Map<String, String>> userAnswers;

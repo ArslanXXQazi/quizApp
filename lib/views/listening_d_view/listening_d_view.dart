@@ -2,20 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:studypool/common_widget/text_widget.dart';
 import 'package:studypool/views/detail_view/detail_view.dart';
-import 'package:studypool/views/listening_a_view/listening_a_view.dart';
-
-class FillBlankQuestion {
-  final String beforeBlank;
-  final String afterBlank;
-  final String correctAnswer;
-  final String audioPath;
-  FillBlankQuestion({
-    required this.beforeBlank,
-    required this.afterBlank,
-    required this.correctAnswer,
-    required this.audioPath,
-  });
-}
+import 'package:studypool/models/quiz_model.dart';
+import 'package:studypool/models/data.dart';
 
 class ListeningDView extends StatefulWidget {
   const ListeningDView({super.key});
@@ -30,38 +18,7 @@ class _ListeningDViewState extends State<ListeningDView> {
   final List<Map<String, String>> _userAnswers = List.generate(5, (_) => {'userAnswer': '', 'correctAnswer': ''});
   int _currentQuestionIndex = 0;
 
-  final List<FillBlankQuestion> _questions = [
-    FillBlankQuestion(
-      beforeBlank: "Tom's Talking About His Recent Visit To A ",
-      afterBlank: " With His Classmates.",
-      correctAnswer: "Museum",
-      audioPath: "audio/listening1Audio1.mp3",
-    ),
-    FillBlankQuestion(
-      beforeBlank: "The Development Of Technology Have Certainmmnly ",
-      afterBlank: " How Families",
-      correctAnswer: "Changed",
-      audioPath: "audio/listening1Audio2.mp3",
-    ),
-    FillBlankQuestion(
-      beforeBlank: "The Development Of Technology Have Certainmmnly ",
-      afterBlank: " How Families",
-      correctAnswer: "Affected",
-      audioPath: "audio/listening1Audio3.mp3",
-    ),
-    FillBlankQuestion(
-      beforeBlank: "Tom And His Classmates Were Divided In ",
-      afterBlank: " Toin The Workshop.",
-      correctAnswer: "Groups",
-      audioPath: "audio/listening1Audio4.mp3",
-    ),
-    FillBlankQuestion(
-      beforeBlank: "The Development Of Technology Have Certainmmnly ",
-      afterBlank: " How Families",
-      correctAnswer: "Transformed",
-      audioPath: "audio/listening1Audio5.mp3",
-    ),
-  ];
+  final List<FillBlankQuestion> _questions = listeningDQuestions;
 
   @override
   void initState() {

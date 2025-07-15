@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:studypool/common_widget/text_widget.dart';
 import 'package:studypool/views/detail_view/detail_view.dart';
-import 'package:studypool/views/listening_a_view/listening_a_view.dart';
+import 'package:studypool/models/quiz_model.dart';
+import 'package:studypool/models/data.dart';
 
 class ListeningBView extends StatefulWidget {
   const ListeningBView({super.key});
@@ -18,68 +19,7 @@ class _ListeningBViewState extends State<ListeningBView> {
   final List<Map<String, String>> _userAnswers = [];
 
   // List of questions (no images)
-  final List<Question> _questions = [
-    Question(
-      questionText: "Which sentence is grammatically correct?",
-      options: [
-        "A) He don't like to play football.",
-        "B) He doesn't likes to play football.",
-        "C) He doesn't like to play football.",
-        "D) He not like to play football."
-      ],
-      optionImages: ["", "", "", ""], // Not used
-      correctAnswer: "C) He doesn't like to play football.",
-      audioPath: "audio/listening1Audio1.mp3",
-    ),
-    Question(
-      questionText: "Which sentence uses the correct past tense?",
-      options: [
-        "A) She go to school yesterday.",
-        "B) She goes to school yesterday.",
-        "C) She went to school yesterday.",
-        "D) She going to school yesterday."
-      ],
-      optionImages: ["", "", "", ""],
-      correctAnswer: "C) She went to school yesterday.",
-      audioPath: "audio/listening1Audio2.mp3",
-    ),
-    Question(
-      questionText: "Which is a question?",
-      options: [
-        "A) Where are you going?",
-        "B) I am going home.",
-        "C) He is going home.",
-        "D) They went home."
-      ],
-      optionImages: ["", "", "", ""],
-      correctAnswer: "A) Where are you going?",
-      audioPath: "audio/listening1Audio3.mp3",
-    ),
-    Question(
-      questionText: "Which sentence is negative?",
-      options: [
-        "A) She likes apples.",
-        "B) She doesn't like apples.",
-        "C) She eats apples.",
-        "D) She has apples."
-      ],
-      optionImages: ["", "", "", ""],
-      correctAnswer: "B) She doesn't like apples.",
-      audioPath: "audio/listening1Audio4.mp3",
-    ),
-    Question(
-      questionText: "Which is a correct plural form?",
-      options: [
-        "A) Childs",
-        "B) Childes",
-        "C) Children",
-        "D) Childrens"
-      ],
-      optionImages: ["", "", "", ""],
-      correctAnswer: "C) Children",
-      audioPath: "audio/listening1Audio5.mp3",
-    ),
-  ];
+  final List<Question> _questions = listeningBQuestions;
 
   @override
   void initState() {
