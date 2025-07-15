@@ -32,6 +32,7 @@ class DetailView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
+        leading: IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back,color: Colors.white,)),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         title: const GreenText(
