@@ -77,7 +77,7 @@ final List<Question> listeningBQuestions = [
     ],
     optionImages: ["", "", "", ""],
     correctAnswer: "C) He doesn't like to play football.",
-    audioPath: "audio/listening1Audio1.mp3",
+    audioPath: "audio/listeningbAudio1.mp3",
   ),
   Question(
     questionText: "Which sentence uses the correct past tense?",
@@ -89,7 +89,7 @@ final List<Question> listeningBQuestions = [
     ],
     optionImages: ["", "", "", ""],
     correctAnswer: "C) She went to school yesterday.",
-    audioPath: "audio/listening1Audio2.mp3",
+    audioPath: "audio/listeningBAudio2.mp3",
   ),
   Question(
     questionText: "Which is a question?",
@@ -101,7 +101,7 @@ final List<Question> listeningBQuestions = [
     ],
     optionImages: ["", "", "", ""],
     correctAnswer: "A) Where are you going?",
-    audioPath: "audio/listening1Audio3.mp3",
+    audioPath: "audio/listeningBAudio3.mp3",
   ),
   Question(
     questionText: "Which sentence is negative?",
@@ -113,7 +113,7 @@ final List<Question> listeningBQuestions = [
     ],
     optionImages: ["", "", "", ""],
     correctAnswer: "B) She doesn't like apples.",
-    audioPath: "audio/listening1Audio4.mp3",
+    audioPath: "audio/listeningBAudio4.mp3",
   ),
   Question(
     questionText: "Which is a correct plural form?",
