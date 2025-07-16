@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:studypool/common_widget/listening_container.dart';
 import 'package:studypool/views/sqf_lite/non_verbal_question/add_question_non_verbal.dart';
+import 'package:studypool/views/sqf_lite/non_verbal_question/non_verbal_test.dart';
 
 class NonVerbalQuestion extends StatelessWidget {
   const NonVerbalQuestion({super.key});
@@ -19,7 +20,7 @@ class NonVerbalQuestion extends StatelessWidget {
 
             ListeningContainer(
               onTap: () {
-
+                Navigator.push(context, CupertinoPageRoute(builder: (context)=>NonVerbalTest()));
               },
               text: "Enter Test",
               color: Colors.orange.shade700,
