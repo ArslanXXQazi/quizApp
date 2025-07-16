@@ -88,16 +88,18 @@ class AddQuestionNonVerbal extends StatelessWidget {
               GreenText(
                 text: "Question:",
                 fontWeight: FontWeight.bold,
+                fontSize: 18,
               ),
               TextField(
                 controller: questionController,
                 decoration: InputDecoration(hintText: 'Enter question'),
               ),
-              SizedBox(height: screenHeight * 0.03),
+              SizedBox(height: screenHeight * 0.02),
               GreenText(
                 text: "Select 4 Images & Enter Names:",
                 fontWeight: FontWeight.bold,
               ),
+              SizedBox(height: screenHeight * 0.01),
               Obx(() => Column(
                 children: List.generate(4, (i) => Row(
                   children: [
@@ -113,7 +115,9 @@ class AddQuestionNonVerbal extends StatelessWidget {
                         ),
                         child: imagePaths[i].isEmpty
                             ? Icon(Icons.add_a_photo, size: 40)
-                            : Image.file(File(imagePaths[i]), fit: BoxFit.cover),
+                            : ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.file(File(imagePaths[i]), fit: BoxFit.cover)),
                       ),
                     ),
                     Expanded(
@@ -139,35 +143,46 @@ class AddQuestionNonVerbal extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
               Obx(() => Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                    onPressed: pickAudio,
-                    child: Text(audioPath.value.isEmpty ? 'Pick Audio' : 'Change Audio'),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      audioPath.value.isNotEmpty ? audioPath.value.split('/').last : 'No audio selected',
-                      overflow: TextOverflow.ellipsis,
+                  Center(
+                    child: Column(
+
+                      children: [
+                        ElevatedButton(
+                          onPressed: pickAudio,
+                          child: Text(audioPath.value.isEmpty ? 'Pick Audio' : 'Change Audio'),
+                        ),
+                        SizedBox(height: screenHeight * 0.01),
+                        Text(
+                          audioPath.value.isNotEmpty ? audioPath.value.split('/').last : 'No audio selected',
+                          overflow: TextOverflow.ellipsis,
+                        )
+                      ],
                     ),
                   ),
+                  SizedBox(width: 10),
+
                 ],
               )),
               SizedBox(height: screenHeight * 0.04),
-              ElevatedButton(
-                onPressed: addQuestion,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: addQuestion,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: GreenText(
+                    text: "Add Question",
+                    textColor: Colors.white,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
-                child: GreenText(
-                  text: "Add Question",
-                  textColor: Colors.white,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
+              )
             ],
           ),
         ),

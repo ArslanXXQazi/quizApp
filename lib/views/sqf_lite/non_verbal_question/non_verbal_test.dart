@@ -272,37 +272,47 @@ class _NonVerbalTestState extends State<NonVerbalTest> {
                   ],
                 ),
                 SizedBox(height: screenHeight * 0.02),
-                IconButton(
-                  icon: Icon(Icons.delete, color: Colors.red),
-                  onPressed: () {
-                    Get.dialog(
-                      AlertDialog(
-                        title: Text('Delete Question'),
-                        content: Text('Are you sure you want to delete this question?'),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Get.back(),
-                            child: Text('Go Back'),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              await controller.deleteQuestion(currentQuestion.id!);
-                              Get.back();
-                              // Reset to first question or handle empty
-                              if (controller.questions.isNotEmpty) {
-                                currentQuestionIndex.value = 0;
-                                selectedAnswer.value = '';
-                              } else {
-                                // If no questions left, pop screen
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: (){
+                      Get.dialog(
+                        AlertDialog(
+                          title: Text('Delete Question'),
+                          content: Text('Are you sure you want to delete this question?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Get.back(),
+                              child: Text('Go Back'),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                await controller.deleteQuestion(currentQuestion.id!);
                                 Get.back();
-                              }
-                            },
-                            child: Text('Delete', style: TextStyle(color: Colors.red)),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+                                // Reset to first question or handle empty
+                                if (controller.questions.isNotEmpty) {
+                                  currentQuestionIndex.value = 0;
+                                  selectedAnswer.value = '';
+                                } else {
+                                  // If no questions left, pop screen
+                                  Get.back();
+                                }
+                              },
+                              child: Text('Delete', style: TextStyle(color: Colors.red)),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red
+                    ),
+                    child: GreenText(
+                      text: "Delete Question",
+                      textColor: Colors.white,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ),
               ],
             ),
