@@ -114,12 +114,17 @@ class _NonVerbalTestState extends State<NonVerbalTest> {
                       child: Column(
                         children: [
                           ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(15),
                             child: Container(
-                              height: screenHeight * 0.13,
-                              child: Image.file(
-                                File(currentQuestion.imagePaths[i]),
-                                fit: BoxFit.cover,
+                              margin: EdgeInsets.symmetric(horizontal: screenWidth*.01),
+                              width: double.infinity,
+                              height: screenHeight * 0.16,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15),
+                                child: Image.file(
+                                  File(currentQuestion.imagePaths[i]),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
@@ -134,7 +139,7 @@ class _NonVerbalTestState extends State<NonVerbalTest> {
                     );
                   }),
                 ),
-                SizedBox(height: screenHeight * 0.01),
+                SizedBox(height: screenHeight * 0.02),
                 Row(
                   children: List.generate(2, (i) {
                     final idx = i + 2;
@@ -145,12 +150,17 @@ class _NonVerbalTestState extends State<NonVerbalTest> {
                       child: Column(
                         children: [
                           ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(15),
                             child: Container(
-                              height: screenHeight * 0.13,
-                              child: Image.file(
-                                File(currentQuestion.imagePaths[idx]),
-                                fit: BoxFit.cover,
+                              margin: EdgeInsets.symmetric(horizontal: screenWidth*.01),
+                              width: double.infinity,
+                              height: screenHeight * 0.16,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Image.file(
+                                  File(currentQuestion.imagePaths[idx]),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
@@ -257,7 +267,42 @@ class _NonVerbalTestState extends State<NonVerbalTest> {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
+                    // Delete button
+
                   ],
+                ),
+                SizedBox(height: screenHeight * 0.02),
+                IconButton(
+                  icon: Icon(Icons.delete, color: Colors.red),
+                  onPressed: () {
+                    Get.dialog(
+                      AlertDialog(
+                        title: Text('Delete Question'),
+                        content: Text('Are you sure you want to delete this question?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Get.back(),
+                            child: Text('Go Back'),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              await controller.deleteQuestion(currentQuestion.id!);
+                              Get.back();
+                              // Reset to first question or handle empty
+                              if (controller.questions.isNotEmpty) {
+                                currentQuestionIndex.value = 0;
+                                selectedAnswer.value = '';
+                              } else {
+                                // If no questions left, pop screen
+                                Get.back();
+                              }
+                            },
+                            child: Text('Delete', style: TextStyle(color: Colors.red)),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
