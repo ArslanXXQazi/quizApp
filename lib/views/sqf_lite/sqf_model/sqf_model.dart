@@ -1,4 +1,4 @@
-// Quiz models yahan define hain
+// SQFLite models yahan define hain
 
 class Question {
   final String questionText;
@@ -37,31 +37,5 @@ class TrueFalseQuestion {
     required this.questionText,
     required this.correctAnswer,
     required this.audioPath,
-  });
-}
-
-class VerbalQuestion {
-  final String questionText;
-  final String? audioPath;
-  final String? userRecordingPath;
-  final String? correctAnswer;
-
-  VerbalQuestion({
-    required this.questionText,
-    this.audioPath,
-    this.userRecordingPath,
-    this.correctAnswer,
-  });
-}
-
-class NonVerbalQuestion {
-  final String questionText;
-  final List<String>? images;
-  final String? correctAnswer;
-
-  NonVerbalQuestion({
-    required this.questionText,
-    this.images,
-    this.correctAnswer,
   });
 } 

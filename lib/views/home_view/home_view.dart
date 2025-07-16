@@ -11,6 +11,7 @@ import 'package:studypool/views/listening_a_view/listening_a_controller.dart';
 import 'package:studypool/views/listening_b_view/listening_b_controller.dart';
 import 'package:studypool/views/listening_c_view/listening_c_controller.dart';
 import 'package:studypool/views/listening_d_view/listening_d_controller.dart';
+import 'package:studypool/views/sqf_lite/sqf_lite_home.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -76,7 +77,16 @@ class _HomeViewState extends State<HomeView> {
                     color: Colors.pink
                 ),
               ),
-            ],)
+            ],),
+            SizedBox(height: screenHeight*.03,),
+            ListeningContainer(
+                onTap: () {
+                  Navigator.push(context, CupertinoPageRoute(builder: (context)=>SqfLite()));
+                },
+                text: "SQF LITE",
+                color: Colors.black45,
+                width: double.infinity,
+            )
         ],),
       ),
     );

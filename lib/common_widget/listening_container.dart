@@ -6,11 +6,15 @@ class ListeningContainer extends StatelessWidget {
   final VoidCallback onTap;
   final String text;
   final Color color;
+  final double? height;
+  final double? width;
 
    ListeningContainer({super.key,
      required this.onTap,
      required this.text,
      required this.color,
+     this.height,
+     this.width,
    });
 
   @override
@@ -20,8 +24,8 @@ class ListeningContainer extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: screenHeight*.2,
-        width: screenWidth*.3,
+        height: height?? screenHeight*.2,
+        width:  width?? screenWidth*.3,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: color,
