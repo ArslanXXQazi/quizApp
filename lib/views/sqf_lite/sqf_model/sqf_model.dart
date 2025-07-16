@@ -38,4 +38,40 @@ class TrueFalseQuestion {
     required this.correctAnswer,
     required this.audioPath,
   });
+}
+
+class NonVerbalQuestion {
+  final int? id;
+  final String questionText;
+  final List<String> imagePaths; // 4 images
+  final List<String> imageNames; // 4 names
+  final String? audioPath;
+
+  NonVerbalQuestion({
+    this.id,
+    required this.questionText,
+    required this.imagePaths,
+    required this.imageNames,
+    this.audioPath,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'questionText': questionText,
+      'imagePaths': imagePaths.join(','), // store as comma separated string
+      'imageNames': imageNames.join(','),
+      'audioPath': audioPath,
+    };
+  }
+
+  factory NonVerbalQuestion.fromMap(Map<String, dynamic> map) {
+    return NonVerbalQuestion(
+      id: map['id'],
+      questionText: map['questionText'],
+      imagePaths: (map['imagePaths'] as String).split(','),
+      imageNames: (map['imageNames'] as String).split(','),
+      audioPath: map['audioPath'],
+    );
+  }
 } 
