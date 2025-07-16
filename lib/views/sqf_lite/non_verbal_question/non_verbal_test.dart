@@ -8,13 +8,26 @@ import 'package:studypool/common_widget/text_widget.dart';
 import 'package:studypool/views/detail_view/detail_view.dart';
 import 'package:studypool/models/quiz_model.dart';
 
-class NonVerbalTest extends StatelessWidget {
+class NonVerbalTest extends StatefulWidget {
   NonVerbalTest({super.key});
+  @override
+  State<NonVerbalTest> createState() => _NonVerbalTestState();
+}
+
+class _NonVerbalTestState extends State<NonVerbalTest> {
   final NonVerbalQuestionController controller = Get.put(NonVerbalQuestionController());
   final RxInt currentQuestionIndex = 0.obs;
   final RxString selectedAnswer = ''.obs;
   final RxList<Map<String, String>> userAnswers = <Map<String, String>>[].obs;
   final AudioPlayer audioPlayer = AudioPlayer();
+  int lastPlayedQuestionIndex = -1;
+
+  @override
+  void dispose() {
+    audioPlayer.stop();
+    audioPlayer.dispose();
+    super.dispose();
+  }
 
   void selectOption(String name) {
     selectedAnswer.value = name;
@@ -67,6 +80,17 @@ class NonVerbalTest extends StatelessWidget {
         }
         final currentQuestion = controller.questions[currentQuestionIndex.value];
         final isLastQuestion = currentQuestionIndex.value == controller.questions.length - 1;
+
+        // Audio auto-play only when question changes
+        if (lastPlayedQuestionIndex != currentQuestionIndex.value) {
+          lastPlayedQuestionIndex = currentQuestionIndex.value;
+          if (currentQuestion.audioPath != null && currentQuestion.audioPath!.isNotEmpty) {
+            playAudio(currentQuestion.audioPath);
+          } else {
+            audioPlayer.stop();
+          }
+        }
+
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
           child: SingleChildScrollView(
@@ -80,11 +104,11 @@ class NonVerbalTest extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.03),
-                // Images row (A, B, C, D)
+                // Images in 2 rows, 2 per row
                 Row(
-                  children: List.generate(4, (index) {
-                    final name = currentQuestion.imageNames[index];
-                    final optionLetter = String.fromCharCode(65 + index); // A, B, C, D
+                  children: List.generate(2, (i) {
+                    final name = currentQuestion.imageNames[i];
+                    final optionLetter = String.fromCharCode(65 + i); // A, B
                     final isSelected = selectedAnswer.value == name;
                     return Expanded(
                       child: Column(
@@ -94,7 +118,7 @@ class NonVerbalTest extends StatelessWidget {
                             child: Container(
                               height: screenHeight * 0.13,
                               child: Image.file(
-                                File(currentQuestion.imagePaths[index]),
+                                File(currentQuestion.imagePaths[i]),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -110,21 +134,37 @@ class NonVerbalTest extends StatelessWidget {
                     );
                   }),
                 ),
-                SizedBox(height: screenHeight * 0.02),
-                // Audio play button (if audio exists)
-                if (currentQuestion.audioPath != null && currentQuestion.audioPath!.isNotEmpty)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: () => playAudio(currentQuestion.audioPath),
-                        icon: Icon(Icons.play_arrow),
-                        label: Text('Play Audio'),
+                SizedBox(height: screenHeight * 0.01),
+                Row(
+                  children: List.generate(2, (i) {
+                    final idx = i + 2;
+                    final name = currentQuestion.imageNames[idx];
+                    final optionLetter = String.fromCharCode(65 + idx); // C, D
+                    final isSelected = selectedAnswer.value == name;
+                    return Expanded(
+                      child: Column(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Container(
+                              height: screenHeight * 0.13,
+                              child: Image.file(
+                                File(currentQuestion.imagePaths[idx]),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: screenHeight * .005),
+                          GreenText(
+                            text: "$optionLetter) $name",
+                            fontWeight: FontWeight.bold,
+                            textColor: isSelected ? Colors.green : Colors.black,
+                          ),
+                        ],
                       ),
-                      SizedBox(width: 10),
-                      Text(currentQuestion.audioPath!.split('/').last, overflow: TextOverflow.ellipsis),
-                    ],
-                  ),
+                    );
+                  }),
+                ),
                 SizedBox(height: screenHeight * 0.02),
                 // Option buttons row (A, B, C, D)
                 Row(
@@ -188,6 +228,7 @@ class NonVerbalTest extends StatelessWidget {
                                     'correctAnswer': currentQuestion.imageNames[0],
                                   });
                                 }
+                                audioPlayer.stop(); // Stop audio before navigating to DetailView
                                 final List<Question> detailQuestions = controller.questions.map((q) => Question(
                                   questionText: q.questionText,
                                   options: q.imageNames,
