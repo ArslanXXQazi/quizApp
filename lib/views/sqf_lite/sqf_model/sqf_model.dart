@@ -74,4 +74,36 @@ class NonVerbalQuestion {
       audioPath: map['audioPath'],
     );
   }
+}
+
+class VerbalQuestion {
+  final int? id;
+  final String questionText;
+  final List<String> options;
+  final String? audioPath;
+
+  VerbalQuestion({
+    this.id,
+    required this.questionText,
+    required this.options,
+    this.audioPath,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'questionText': questionText,
+      'options': options.join(','),
+      'audioPath': audioPath,
+    };
+  }
+
+  factory VerbalQuestion.fromMap(Map<String, dynamic> map) {
+    return VerbalQuestion(
+      id: map['id'],
+      questionText: map['questionText'],
+      options: (map['options'] as String).split(','),
+      audioPath: map['audioPath'],
+    );
+  }
 } 

@@ -271,7 +271,7 @@ class _NonVerbalTestState extends State<NonVerbalTest> {
 
                   ],
                 ),
-                SizedBox(height: screenHeight * 0.02),
+                SizedBox(height: screenHeight * 0.03),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
