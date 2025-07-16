@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:studypool/common_widget/listening_container.dart';
+import 'package:studypool/views/sqf_lite/verbal_questions/add_verbal_question.dart';
+import 'package:studypool/views/sqf_lite/verbal_questions/verbal_test.dart';
 
 class VerbalQuestion extends StatelessWidget {
   const VerbalQuestion({super.key});
@@ -17,6 +20,7 @@ class VerbalQuestion extends StatelessWidget {
 
             ListeningContainer(
               onTap: () {
+                Navigator.push(context, CupertinoPageRoute(builder: (context)=>VerbalTest()));
 
               },
               text: "Enter Test",
@@ -27,7 +31,7 @@ class VerbalQuestion extends StatelessWidget {
             ListeningContainer(
               onTap: ()
               {
-
+                Navigator.push(context, CupertinoPageRoute(builder: (context)=>AddVerbalQuestion()));
               },
               text: "Add Questions",
               color: Colors.yellow.shade900,
